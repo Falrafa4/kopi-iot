@@ -39,7 +39,7 @@ $kompos_detail = $result_kompos->fetch_assoc();
     <title>Detail Toko - <?= htmlspecialchars($toko_detail['nama_toko']) ?></title>
     
     <link rel="stylesheet" href="../../assets/style/global.css">
-    <link rel="stylesheet" href="../../assets/style/dashboard.css">
+    <link rel="stylesheet" href="../../assets/style/driver.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,7 +63,7 @@ $kompos_detail = $result_kompos->fetch_assoc();
 
         <section class="detail-hero">
             <div class="detail-image">
-                <img src="../../assets/img/<?= htmlspecialchars($toko_detail['gambar_toko']) ?>" alt="<?= htmlspecialchars($toko_detail['nama_toko']) ?>">
+                <img src="../../assets/img/toko/<?= htmlspecialchars($toko_detail['gambar_toko']) ?>" alt="<?= htmlspecialchars($toko_detail['nama_toko']) ?>">
             </div>
 
             <div class="detail-info card-clean">

@@ -3,6 +3,7 @@ session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,29 +16,25 @@ session_start();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <!-- NAVBAR -->
-    <?php include __DIR__ . '/includes/nav.php'; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/nav.php'; ?>
     <!-- NAVBAR END -->
 
     <!-- KONTEN -->
     <main>
-        <section class="hero">
-            <h1>Welcome to KOPI IoT</h1>
+        <section class="about">
+            <h2>About Kopi IoT</h2>
             <hr>
-            <p>Komposter Pintar Untuk Rumah dan Warung Kopi</p>
-            <div class="btn-group">
-                <a href="/dashboard/penjual/" class="btn-primary">Kumpulkan Ampas</a>
-                <a href="/dashboard/pembeli/" class="btn-primary">Beli Kompos</a>
-            </div>
+            <p>Kopi IoT adalah platform inovatif yang memanfaatkan teknologi Internet of Things untuk mengelola ampas kopi secara efisien. Sistem kami membantu penjual kopi memantau tingkat ampas mereka dan memberi notifikasi kepada pengemudi saat waktunya pengumpulan, memastikan lingkungan yang lebih bersih dan mendorong praktik berkelanjutan.</p>
         </section>
     </main>
     <!-- KONTEN END -->
 
     <!-- FOOTER -->
-    <?php include __DIR__ . '/includes/footer.php'; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php'; ?>
     <!-- FOOTER END -->
-
-    <script src="/assets/js/script.js"></script>
 </body>
+
 </html>

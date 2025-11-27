@@ -1,21 +1,19 @@
 <nav id="navbar">
     <a href="/">
-        <h1>KOPI IoT</h1>
+        <img src="/assets/img/logo-secondary.png" alt="KOPI IoT Logo" />
     </a>
-    <!-- <div class="search">
-        <input type="text" id="search" placeholder="Search...">
-        <svg class="search-icon" width="18" height="18" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.11892 16.235C5.85414 16.235 3.93456 15.4483 2.36017 13.8748C0.786722 12.3023 0 10.3832 0 8.1175C0 5.85178 0.786722 3.9322 2.36017 2.35875C3.93361 0.785306 5.85319 -0.000943595 8.11892 8.4983e-07C10.3846 0.000945294 12.3037 0.787667 13.8762 2.36017C15.4487 3.93267 16.2355 5.85178 16.2364 8.1175C16.2364 9.10161 16.0622 10.0541 15.7137 10.9749C15.3652 11.8958 14.9071 12.6834 14.3395 13.3379L22.7106 21.7062C22.8428 21.8384 22.9136 22.0013 22.9231 22.1949C22.9316 22.3866 22.8607 22.5581 22.7106 22.7092C22.5595 22.8603 22.3923 22.9358 22.2091 22.9358C22.0259 22.9358 21.8587 22.8603 21.7076 22.7092L13.3379 14.3395C12.6296 14.943 11.815 15.41 10.8942 15.7406C9.97333 16.0711 9.04778 16.2364 8.1175 16.2364M8.1175 14.8198C9.99694 14.8198 11.5841 14.1728 12.8789 12.8789C14.1728 11.585 14.8198 9.99789 14.8198 8.1175C14.8198 6.23711 14.1733 4.65045 12.8803 3.3575C11.5874 2.06456 10.0007 1.41761 8.12033 1.41667C6.23994 1.41667 4.65281 2.06361 3.35892 3.3575C2.06503 4.65139 1.41761 6.23806 1.41667 8.1175C1.41572 9.99694 2.06267 11.5836 3.3575 12.8775C4.65233 14.1714 6.239 14.8183 8.1175 14.8183" fill="#684503" />
-        </svg>
-    </div> -->
     <ul>
-        <!-- <li><a href="/driver/">Driver</a></li>
-        <li><a href="/penjual/">Penjual</a></li> -->
+        <?php 
+        $namaFolder = basename(dirname($_SERVER['SCRIPT_NAME'])); //mengambil nama url terakhir
+        ?>
+        <li><a href="/" class="<?= ($namaFolder == "") ? 'active' : '' ?>">Home</a></li>
+        <li><a href="/pages/fitur/" class="<?= ($namaFolder == "fitur") ? 'active' : '' ?>">Fitur</a></li>
+        <li><a href="/pages/about/" class="<?= ($namaFolder == "about") ? 'active' : '' ?>">About</a></li>
         <?php
         if (isset($_SESSION['data'])) {
         ?>
-            <li><a href="/dashboard/<?= htmlspecialchars($_SESSION['data']['role']); ?>/"><?= htmlspecialchars(ucfirst($_SESSION['data']['role'])); ?></a></li>
-            <li><a href="/auth/logout.php">Logout</a></li>
+            <li><a href="/dashboard/<?= htmlspecialchars($_SESSION['data']['role']); ?>/" class="<?= ($namaFolder == $_SESSION['data']['role']) ? 'active' : '' ?>"><?= htmlspecialchars(ucfirst($_SESSION['data']['role'])); ?></a></li>
+            <li><a href="/auth/logout.php" class="<?= ($namaFolder == "logout.php") ? 'active' : '' ?>">Logout</a></li>
         <?php
         } else {
         ?>

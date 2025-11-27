@@ -5,7 +5,7 @@ include '../../functions/toko.php';
 include '../../functions/kesimpulan.php';
 
 if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'penjual') {
-    header('Location: ../../login/');
+    header('Location: ../../auth/login/');
     exit();
 }
 

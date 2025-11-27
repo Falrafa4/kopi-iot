@@ -15,6 +15,15 @@ function getUserById($id) {
     return $stmt->get_result()->fetch_assoc();
 }
 
+function getPasswordById($id) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT password FROM users WHERE id_user = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+    return $result ? $result['password'] : null;
+}
+
 function loginUser($username, $password) {
     global $conn;
     $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
@@ -30,10 +39,10 @@ function insertUser($nama, $username, $password, $role) {
     return $stmt->execute();
 }
 
-function updateUser($id, $username, $password, $role) {
+function updateUser($id, $nama, $username, $password, $role) {
     global $conn;
     $stmt = $conn->prepare("UPDATE users SET nama = ?, username = ?, password = ?, role = ? WHERE id_user = ?");
-    $stmt->bind_param("ssssi", $username, $password, $role, $id);
+    $stmt->bind_param("ssssi", $nama, $username, $password, $role, $id);
     return $stmt->execute();
 }
 

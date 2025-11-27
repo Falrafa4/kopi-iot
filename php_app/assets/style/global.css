@@ -87,37 +87,54 @@ hr.line-break {
 /* --- NAVBAR IMPROVED --- */
 nav {
     transition: .5s ease;
-    position: sticky;
+    position: fixed;
+    width: 100%;
     top: 0;
     z-index: 1005;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--primary-color);
-    padding: 1rem 5%;
+    background-color: rgba(104, 69, 3, 0.7);
+    padding: 0 5%;
+    height: 10dvh;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-nav h1 {
-    font-size: 1.8rem;
-    color: var(--secondary-color);
-    letter-spacing: 1px;
+nav img {
+    height: 50px;
 }
 
 nav ul {
     list-style: none;
     display: flex;
-    gap: 2rem;
+    gap: 2.5rem;
 }
 
 nav ul a {
     color: var(--secondary-color);
     font-weight: 400;
     font-size: 0.95rem;
-    opacity: 0.8;
+    opacity: 0.6;
+}
+
+nav ul a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: var(--secondary-color);
+    transition: width .3s;
+}
+
+nav ul a:hover::after {
+    width: 100%;
 }
 
 nav ul a:hover {
+    opacity: 1;
+}
+
+nav ul a.active {
     opacity: 1;
 }
 
@@ -236,6 +253,28 @@ button {
     cursor: not-allowed;
 }
 /* BUTTON END */
+
+/* Badge Status Toko */
+.badge-status {
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.status-active {
+    background-color: rgba(39, 174, 96, 0.1);
+    color: #27ae60;
+    border: 1px solid rgba(39, 174, 96, 0.2);
+}
+
+.status-inactive {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.2);
+}
 
 /* MODAL */
 .modal-toggler {

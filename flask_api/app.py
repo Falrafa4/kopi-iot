@@ -22,6 +22,9 @@ def save_to_db(data):
     WHERE id_sensor=1
     """
 
+    volume_box = (24 - data['volume'])*18*21 # dalam cm3
+    data['volume'] = (data['volume'] / volume_box) * 100
+
     cur.execute(sql_update, (
         data['id_toko'],
         data['suhu'],

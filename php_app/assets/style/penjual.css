@@ -5,9 +5,9 @@
 /* 1. Base Layout */
 main {
     /* Padding konsisten dengan global main, untuk memberikan ruang napas */
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 3rem 5% 6rem 5%;
+    padding: 3rem 10% 6rem 10%;
 }
 
 main h1 {
@@ -32,7 +32,8 @@ p.history {
 }
 
 .menu-nav ul {
-    display: flex; /* Menggunakan flex untuk tab */
+    display: flex;
+    /* Menggunakan flex untuk tab */
     gap: 0;
     width: 100%;
     margin: 0;
@@ -43,7 +44,8 @@ p.history {
 .menu-nav ul li {
     margin: 0;
     flex-grow: 1;
-    max-width: 250px; /* Batasan lebar tab di desktop */
+    max-width: 250px;
+    /* Batasan lebar tab di desktop */
     text-align: center;
 }
 
@@ -67,7 +69,7 @@ p.history {
     border-radius: 8px 8px 0 0;
     border-bottom: 3px solid var(--primary-color);
     /* Sedikit diangkat agar terlihat menonjol */
-    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05); 
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05);
 }
 
 /* summary */
@@ -125,6 +127,7 @@ p.history {
     color: #e74c3c;
     border: 1px solid rgba(231, 76, 60, 0.2);
 }
+
 /* summary end */
 
 /* sensor */
@@ -143,6 +146,7 @@ p.history {
     border: 1px solid rgba(104, 69, 3, 0.05);
     text-align: center;
 }
+
 /* sensor end */
 
 /* DAFTAR PESANAN */
@@ -192,7 +196,8 @@ p.history {
 /* Layout Dashboard */
 #dashboard-content .container {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Sensor lebih besar, Map lebih kecil */
+    grid-template-columns: 2fr 1fr;
+    /* Sensor lebih besar, Map lebih kecil */
     gap: 2.5rem;
     margin-top: 2rem;
 }
@@ -220,11 +225,11 @@ p.history {
 }
 
 /* Map Box */
-.box-content iframe {
+.map iframe {
     width: 100%;
     height: 350px;
     border-radius: 12px;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
 
@@ -279,13 +284,15 @@ p.history {
 }
 
 .status-success {
-    background-color: #dcfce7; /* Green lembut */
-    color: #15803d; 
+    background-color: #dcfce7;
+    /* Green lembut */
+    color: #15803d;
 }
 
 .status-pending-sales {
-    background-color: #ffedd5; /* Amber lembut */
-    color: #c2410c; 
+    background-color: #ffedd5;
+    /* Amber lembut */
+    color: #c2410c;
 }
 
 
@@ -347,7 +354,7 @@ a.chat-card:active {
 .chat-icon-container svg {
     width: 24px;
     height: 24px;
-    fill: var(--secondary-color); 
+    fill: var(--secondary-color);
 }
 
 .chat-details {
@@ -394,7 +401,8 @@ a.chat-card:active {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #eab308; /* Kuning untuk notifikasi */
+    background-color: #eab308;
+    /* Kuning untuk notifikasi */
     color: #fff;
     font-size: 0.75rem;
     font-weight: 600;
@@ -406,10 +414,12 @@ a.chat-card:active {
 
 /* Responsive Styles */
 @media (max-width: 768px) {
+
     /* Menu Navigasi (Tabs) - Tumpuk 2 kolom */
     .menu-nav ul {
         flex-wrap: wrap;
     }
+
     .menu-nav ul li {
         max-width: none;
         flex-basis: 50%;
@@ -417,7 +427,7 @@ a.chat-card:active {
 
     /* Dashboard Grid - Tumpuk vertikal di HP */
     #dashboard-content .container {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr;
     }
 
     .box-content {
