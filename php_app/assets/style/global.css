@@ -1,0 +1,352 @@
+@import url('https://fonts.googleapis.com/css2?family=Gilda+Display&family=Poppins:wght@300;400;500&display=swap');
+
+:root {
+    --primary-color: #684503;
+    --primary-hover: #4a3102; /* Versi agak gelap untuk hover */
+    --secondary-color: #FFFAF1;
+    --text-color: #333333; /* Warna teks bacaan agar tidak terlalu tajam kontrasnya */
+    --shadow-soft: 0 10px 30px rgba(104, 69, 3, 0.08);
+    --default-transition: all 0.3s ease;
+}
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  appearance: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    /* Menggunakan Poppins untuk body agar clean */
+    font-family: 'Poppins', sans-serif; 
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Heading tetap menggunakan Gilda Display agar elegan */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Gilda Display', serif;
+    font-weight: 400;
+    color: var(--primary-color);
+}
+
+.mb-1 {
+    margin-bottom: 1rem;
+}
+
+.mb-2 {
+    margin-bottom: 2rem;
+}
+
+main {
+    padding: 3rem 5%; /* Menggunakan % agar lebih aman di layar kecil */
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 80vh;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--default-transition);
+}
+
+hr.line-break {
+    border: none;
+    height: 2px;
+    background: var(--primary-color);
+    width: 60px; /* Membuat garis pendek minimalis */
+    margin: 1rem 0;
+    opacity: 0.7;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(104, 69, 3, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    font-style: italic;
+    margin-top: 1rem;
+}
+
+/* --- NAVBAR IMPROVED --- */
+nav {
+    transition: .5s ease;
+    position: sticky;
+    top: 0;
+    z-index: 1005;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary-color);
+    padding: 1rem 5%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+nav h1 {
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+    letter-spacing: 1px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+}
+
+nav ul a {
+    color: var(--secondary-color);
+    font-weight: 400;
+    font-size: 0.95rem;
+    opacity: 0.8;
+}
+
+nav ul a:hover {
+    opacity: 1;
+}
+
+nav .search {
+    display: flex;
+    align-items: center;
+    position: relative;
+    background: rgba(255, 255, 255, 0.1); /* Glass effect pada input */
+    border-radius: 50px;
+    padding: 5px 15px;
+}
+
+nav .search input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--secondary-color);
+    padding: 0.5rem;
+    width: 250px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+}
+
+nav .search input::placeholder {
+    color: rgba(255, 250, 241, 0.7);
+}
+
+.search-icon path {
+    fill: var(--secondary-color); /* Ubah icon jadi putih agar kontras */
+}
+
+/* BUTTONS */
+.btn-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    height: fit-content;
+}
+
+button {
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    outline: none;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(104, 69, 3, 0.2);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(104, 69, 3, 0.3);
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.8rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    background-color: var(--secondary-color);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(104, 69, 3, 0.3);
+}
+
+.btn-primary-disabled {
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.8rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    transition: all 0.3s ease;
+    cursor: not-allowed;
+}
+
+.btn-secondary-disabled {
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.8rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    background-color: var(--secondary-color);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+    cursor: not-allowed;
+}
+/* BUTTON END */
+
+/* MODAL */
+.modal-toggler {
+    width: fit-content;
+    cursor: pointer;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.modal-toggler:hover p {
+    text-decoration: underline;
+}
+
+#modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s ease, transform 0.3s ease;
+}
+
+#modal .close-button {
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+#modal .modal-content {
+    background: var(--secondary-color);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow-soft);
+    width: 50%;
+    max-width: 800px;
+    position: relative;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+#modal .modal-content p {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+#modal .modal-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- FOOTER --- */
+footer {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 6rem 10%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+footer h1 {
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+footer p, footer span, footer h3 {
+    color: rgba(255, 250, 241, 0.8);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+}
+
+footer .footer-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-left: 50%;
+}
+
+.footer-right .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.footer-right .contact-info p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    footer {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    footer .footer-right {
+        text-align: center;
+    }
+    .footer-right .contact-info {
+        align-items: center;
+    }
+    nav .search input {
+        width: 150px; /* Kecilkan search bar di mobile */
+    }
+}
