@@ -21,8 +21,8 @@ cd kopi-iot/php_app/
 
 2. Impor database MySQL
 ```sql
-CREATE DATABASE kopi_iot
-USE kopi_iot
+CREATE DATABASE kopi_iot;
+USE kopi_iot;
 
 -- Kemudian impor database lewat PHPMyAdmin atau lainnya
 ```
