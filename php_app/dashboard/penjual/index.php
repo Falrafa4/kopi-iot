@@ -4,7 +4,7 @@ include '../../config/db.php';
 include '../../functions/toko.php';
 include '../../functions/kesimpulan.php';
 
-$volume_wadah = 9072; //dalam ml/cm3
+$volume_wadah = 9; //dalam ml/cm3
 
 if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'penjual') {
     header('Location: ../../auth/login/');
@@ -139,7 +139,7 @@ $json = $result->fetch_assoc();
                     <p class="keuntungan-text">Berdasarkan data volume pada ampas kopi, perkiraan keuntungan Anda untuk penyetoran ampas kopi adalah:</p>
                     <?php
                     // Dummy calculation for estimated profit
-                    $estimated_profit = $json['volume'] * ($volume_wadah / 100) * 0.3; // Ganti dengan logika perhitungan
+                    $estimated_profit = $volume_wadah * ($json['volume'] / 100) * 300; // Ganti dengan logika perhitungan
                     ?>
                     <p class="profit">Rp <?= number_format($estimated_profit, 0, ',', '.') ?></p>
                 </div>

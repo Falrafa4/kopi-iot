@@ -9,7 +9,7 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
 // --- QUERY DATA UNTUK REPORT ---
 
 // A. Menghitung Total Keuntungan
-$sql_profit = "SELECT SUM(keuntungan_value) * 9072 as total FROM keuntungan WHERE keuntungan_key = 'Admin'";
+$sql_profit = "SELECT SUM(keuntungan_value) * 9 as total FROM keuntungan WHERE keuntungan_key = 'Admin'";
 $result_profit = $conn->query($sql_profit);
 $row_profit = $result_profit->fetch_assoc();
 $total_profit = $row_profit['total'] ?? 0;

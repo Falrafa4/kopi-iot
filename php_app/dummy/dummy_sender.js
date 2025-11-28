@@ -1,4 +1,4 @@
-function kirimDummy() {
+function kirimDummy(idSensor) {
     // Suhu: 15 - 35
     const suhu = (15 + Math.random() * (35 - 15)).toFixed(1);
 
@@ -24,6 +24,7 @@ function kirimDummy() {
     form.append("volume", volume);
     form.append("status", status);
     form.append("prediksi_selesai", prediksiSelesai);
+    form.append("id_sensor", idSensor);
 
     fetch("/dummy/insert.php", {
         method: "POST",
@@ -37,4 +38,8 @@ function kirimDummy() {
 }
 
 // kirim setiap 2 detik
-setInterval(kirimDummy, 5000);
+setInterval(() => {
+    kirimDummy(2);
+    kirimDummy(3);
+    kirimDummy(4);
+}, 5000);
