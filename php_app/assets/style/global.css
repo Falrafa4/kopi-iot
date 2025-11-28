@@ -52,7 +52,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 main {
-    padding: 6rem 5% 3rem 5%; /* Menggunakan % agar lebih aman di layar kecil */
+    padding: 7rem 5% 3rem 5%; /* Menggunakan % agar lebih aman di layar kecil */
     max-width: 1400px;
     margin: 0 auto;
     min-height: 80vh;
@@ -96,12 +96,11 @@ nav {
     align-items: center;
     background-color: rgba(104, 69, 3, 0.7);
     padding: 0 5%;
-    height: 10dvh;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
 nav img {
-    height: 50px;
+    height: 80px;
 }
 
 nav ul {

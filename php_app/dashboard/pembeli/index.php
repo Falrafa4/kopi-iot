@@ -10,13 +10,8 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'pembeli') {
 // user sementara (prototype)
 $id_user = $_SESSION['data']['id_user'];
 
-$query = $conn->query("SELECT * FROM toko");
-$toko_all = $query->fetch_all(MYSQLI_ASSOC);
-
-$query_notif = $conn->query("SELECT toko.nama_toko, sensor.status FROM sensor
-JOIN toko ON sensor.id_toko = toko.id_toko
-WHERE sensor.status = 'Ready'");
-$notifikasi = $query_notif->fetch_all(MYSQLI_ASSOC);
+$query = $conn->query("SELECT * FROM produk");
+$produk_all = $query->fetch_all(MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,36 +43,35 @@ $notifikasi = $query_notif->fetch_all(MYSQLI_ASSOC);
     <!-- NAVBAR END -->
 
     <!-- KONTEN -->
-    <main>
-        <section>
-            <h1>Selamat Datang, <?= htmlspecialchars($_SESSION['data']['nama']) ?>!</h1>
-            <hr class="line-break">
-        </section>
-
-        <section>
-            <h2 class="mb-1">Daftar Toko Penyedia Ampas Kopi</h2>
-            <div class="container" id="containerToko">
-                <?php foreach ($toko_all as $toko) : ?>
-                    <div href="detail.php?id=<?= htmlspecialchars($toko['id_toko']) ?>" class="card-toko" data-id="<?= htmlspecialchars($toko['id_toko']) ?>">
-                        <div class="image-container">
-                            <img src="../../assets/img/<?= htmlspecialchars($toko['gambar_toko']) ?>" alt="Kafe 1">
-                        </div>
-                        <div class="desc">
-                            <h3><?= strtoupper($toko['nama_toko']) ?></h3>
-                            <p><?= htmlspecialchars($toko['alamat']) ?></p>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </section>
-    </main>
+    <div class="content" id="content">
+        <?php include '../../includes/pembeli_aside.php'; ?>
+        <main>
+            <section>
+                <h1>Selamat Datang, <?= htmlspecialchars($_SESSION['data']['nama']) ?>!</h1>
+                <hr class="line-break">
+            </section>
+    
+            <section>
+                <h2 class="mb-1">Daftar Produk Kami</h2>
+                <div class="container" id="containerProduk">
+                    <?php foreach ($produk_all as $produk) : ?>
+                        <a href="pesan.php?id=<?= htmlspecialchars($produk['id_produk']) ?>" class="card-toko" data-id="<?= htmlspecialchars($produk['id_produk']) ?>">
+                            <div class="image-container">
+                                <img src="../../assets/img/produk/<?= htmlspecialchars($produk['gambar']) ?>" alt="Kafe 1">
+                            </div>
+                            <div class="desc">
+                                <h3><?= strtoupper($produk['nama_produk']) ?></h3>
+                                <p>Rp<?= number_format($produk['harga'], 0, ',', '.') ?></p>
+                            </div>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        </main>
+    </div>
     <!-- KONTEN END -->
 
-    <!-- FOOTER -->
-    <?php include '../../includes/footer.php'; ?>
-    <!-- FOOTER END -->
-
-    <!-- <script src="../../assets/js/script.js"></script> -->
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

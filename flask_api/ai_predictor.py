@@ -4,7 +4,7 @@ import os
 API_KEY = os.getenv("GEMINI_API_KEY")
 
 client = genai.Client(api_key=API_KEY)
-model = "gemini-2.0-flash"
+model = "gemini-2.0-flash-lite"
 
 def predict_finish_time(suhu, kelembapan, volume):
     prompt = f"""
@@ -13,7 +13,7 @@ def predict_finish_time(suhu, kelembapan, volume):
     Data sensor yang diberikan adalah:
     - Suhu: {suhu} °C
     - Kelembapan: {kelembapan} %
-    - Volume/berat ampas kopi: {volume} gr
+    - Volume/berat ampas kopi: {volume} % dari kapasitas maksimum wadah fermentasi, yaitu 9072 mL atau sekitar 9 Liter.
 
     Berdasarkan data tersebut, prediksikan dalam hari berapa lama lagi proses yang stabil akan selesai dan siap untuk dikirimkan untuk diolah menjadi pupuk? Berikan jawaban Anda dalam format hanya angka hari saja tanpa penjelasan tambahan.
     """

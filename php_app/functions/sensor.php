@@ -11,7 +11,7 @@ function getSensorById($id) {
 
 function getSensorAll() {
     global $conn;
-    $result = $conn->query("SELECT * FROM sensor JOIN toko ON sensor.id_toko = toko.id_toko");
+    $result = $conn->query("SELECT * FROM sensor JOIN toko ON sensor.id_toko = toko.id_toko ORDER BY sensor.id_sensor ASC");
     return $result->fetch_all(MYSQLI_ASSOC);
 }
 

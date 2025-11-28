@@ -1,29 +1,29 @@
 <!-- INI HALAMAN DASHBOARD ADMIN -->
 <?php
 require_once "../../../config/db.php";
-require_once '../../../functions/produk.php';
+require_once '../../../functions/keuntungan.php';
 
 if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
     header('Location: ../../../auth/login/');
     exit();
 }
 
-$nama_produk = '';
-$harga = '';
-$stok = '';
-$gambar = '';
+$keuntungan_key = '';
+$keuntungan_value = '';
+$unit = '';
+$keterangan = '';
 
 if (isset($_GET['id'])) {
-    $produk_id = $_GET['id'];
-    $produk = getProdukById($produk_id);
+    $id_keuntungan = $_GET['id'];
+    $keuntungan = getKeuntunganById($id_keuntungan);
 
-    if (!$produk) {
-        $_SESSION['error'] = "Produk tidak ditemukan.";
+    if (!$keuntungan) {
+        $_SESSION['error'] = "User tidak ditemukan.";
     } else {
-        $nama_produk = $produk['nama_produk'];
-        $harga = $produk['harga'];
-        $stok = $produk['stok'];
-        $gambar = $produk['gambar'];
+        $keuntungan_key = $keuntungan['keuntungan_key'];
+        $keuntungan_value = $keuntungan['keuntungan_value'];
+        $unit = $keuntungan['satuan'];
+        $keterangan = $keuntungan['keterangan'];
     }
 }
 ?>
@@ -61,23 +61,23 @@ if (isset($_GET['id'])) {
         <?php include '../../../includes/admin_aside.php'; ?>
         <main>
             <section class="kelola user">
-                <h1><?= isset($_GET['id']) ? 'Edit' : 'Tambah' ?> Produk</h1>
+                <h1><?= isset($_GET['id']) ? 'Edit' : 'Tambah' ?> Keuntungan</h1>
                 <hr class="line-break">
-                <form action="/dashboard/admin/manage_produk/process.php" method="POST" class="form-kelola" enctype="multipart/form-data">
+                <form action="/dashboard/admin/manage_untung/process.php" method="POST" class="form-kelola">
                     <?php if (isset($_GET['id'])): ?>
-                        <input type="hidden" name="id_produk" value="<?= htmlspecialchars($_GET['id']) ?>">
+                        <input type="hidden" name="id_keuntungan" value="<?= htmlspecialchars($_GET['id']) ?>">
                     <?php endif; ?>
-                    <label for="nama_produk">Nama Produk:</label>
-                    <input type="text" id="nama_produk" name="nama_produk" value="<?= $nama_produk ?>" required>
+                    <label for="keuntungan_key">Nama Keuntungan:</label>
+                    <input type="text" id="keuntungan_key" name="keuntungan_key" value="<?= $keuntungan_key ?>" required>
 
-                    <label for="harga">Harga:</label>
-                    <input type="text" id="harga" name="harga" value="<?= $harga ?>" required>
+                    <label for="keuntungan_value">Nilai Keuntungan:</label>
+                    <input type="text" id="keuntungan_value" name="keuntungan_value" value="<?= $keuntungan_value ?>" placeholder="Contoh (dengan koma): 7.5, 9.0" required>
 
-                    <label for="stok">Stok:</label>
-                    <input type="number" id="stok" name="stok" value="<?= $stok ?>" required>
+                    <label for="unit">Satuan:</label>
+                    <input type="text" id="unit" name="unit" value="<?= $unit ?>" placeholder="Contoh: mL, kg" required>
 
-                    <label for="gambar">Gambar:</label>
-                    <input type="file" id="gambar" name="gambar" value="<?= $gambar ?>" <?= isset($_GET['id']) ? '' : 'required' ?>>
+                    <label for="keterangan">Keterangan:</label>
+                    <input type="text" id="keterangan" name="keterangan" value="<?= $keterangan ?>" placeholder="Opsional">
 
                     <div class="btn-group">
                         <a href="./">

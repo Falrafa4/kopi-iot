@@ -37,6 +37,10 @@ $query_driver->bind_param("i", $id_user);
 $query_driver->execute();
 $result_driver = $query_driver->get_result();
 $driver = $result_driver->fetch_assoc();
+
+// fetch keuntungan driver
+$query_untung = $conn->query("SELECT * FROM keuntungan WHERE keuntungan_key = 'Driver'");
+$keuntungan = $query_untung->fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -127,14 +131,6 @@ $driver = $result_driver->fetch_assoc();
 
                     <?php endforeach; ?>
                     <div class="map-sampah" id="map-sampah">
-                        <!-- <iframe
-                            width="600"
-                            height="450"
-                            style="border:0;"
-                            loading="lazy"
-                            allowfullscreen
-                            src="https://www.google.com/maps?q=-7.4461,112.7183&z=15&output=embed">
-                        </iframe> -->
                         <div class="placeholder" id="map-placeholder">
                             <p>Map Akan muncul di sini</p>
                         </div>
@@ -144,7 +140,7 @@ $driver = $result_driver->fetch_assoc();
 
             <section class="pengambilan">
                 <h2 class="mb-1">Jumlah Ampas Yang Telah Diambil</h2>
-                <p><?= $driver['jumlah_gram'] ?> gram</p>
+                <p><?= $driver['total_volume'] ?> mL</p>
             </section>
 
             <section>
@@ -182,20 +178,14 @@ $driver = $result_driver->fetch_assoc();
             <div class="performance-metrics">
                 <div class="metric-card today primary">
                     <h3>Pendapatan Hari Ini</h3>
-                    <span class="metric-value">Rp 30.000</span>
-                    <p class="metric-detail">Dari 100.000 mL Ampas Kopi</p>
+                    <span class="metric-value">Rp <?= number_format($keuntungan['keuntungan_value'] * $driver['total_volume'], 0, ',', '.') ?></span>
+                    <p class="metric-detail">Dari <?= $driver['total_volume'] ?> mL Ampas Kopi</p>
                 </div>
 
                 <div class="metric-card monthly warning">
                     <h3>Total Volume Bulan Ini</h3>
-                    <span class="metric-value">250 L</span>
-                    <p class="metric-detail">Sama dengan Rp 75.000</p>
-                </div>
-
-                <div class="metric-card complete info">
-                    <h3>Tugas Selesai (Total)</h3>
-                    <span class="metric-value">85</span>
-                    <p class="metric-detail">Tingkat keberhasilan 95%</p>
+                    <span class="metric-value"><?= $driver['total_volume'] ?> mL</span>
+                    <p class="metric-detail">Sama dengan Rp <?= number_format($keuntungan['keuntungan_value'] * $driver['total_volume'], 0, ',', '.') ?></p>
                 </div>
             </div>
         </div>
@@ -284,30 +274,56 @@ $driver = $result_driver->fetch_assoc();
                 card.addEventListener('click', () => {
                     const tokoId = card.getAttribute('data-id');
 
-                    // hapus class active dari semua card
+                    // Hapus class active dari semua card
                     cards.forEach(c => c.classList.remove('active'));
 
-                    // tambahkan class active ke card yang diklik
+                    // Tambahkan class active ke card yang diklik
                     card.classList.add('active');
 
                     fetch(`../../api/get_map_toko.php?id=${tokoId}`)
                         .then(response => response.json())
                         .then(data => {
                             const mapPlaceholder = document.getElementById('map-placeholder');
+
+                            // Default: hanya lokasi toko
+                            let mapSrc = `https://www.google.com/maps?q=${data.lat},${data.lng}&z=15&output=embed`;
+
+                            // Masukkan iframe terlebih dahulu
                             mapPlaceholder.innerHTML = `
                         <iframe
+                            id="mapFrame"
                             width="600"
                             height="450"
                             style="border:0;"
                             loading="lazy"
                             allowfullscreen
-                            src="https://www.google.com/maps?q=${data.lat},${data.lng}&z=15&output=embed">
+                            src="${mapSrc}">
                         </iframe>
                     `;
+
+                            // Setelah iframe dibuat → ambil lokasi user
+                            if (navigator.geolocation) {
+                                navigator.geolocation.getCurrentPosition(pos => {
+                                    const userLat = pos.coords.latitude;
+                                    const userLng = pos.coords.longitude;
+
+                                    // Update iframe dengan 2 marker:
+                                    // merah = toko, biru = user
+                                    const frame = document.getElementById("mapFrame");
+                                    frame.src =
+                                        `https://www.google.com/maps?q=${data.lat},${data.lng}&z=15&output=embed` +
+                                        `&markers=color:red|${data.lat},${data.lng}` +
+                                        `&markers=color:blue|${userLat},${userLng}`;
+                                }, err => {
+                                    console.log("User tolak GPS:", err.message);
+                                    // Kalau ditolak → tetap tampil lokasi toko saja
+                                });
+                            }
                         });
                 });
             });
         }
+
 
         function attachCardClick() {
             document.querySelectorAll('.card-toko').forEach(card => {
