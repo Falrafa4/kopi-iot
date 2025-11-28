@@ -651,6 +651,124 @@ section.pengambilan p {
 /* SECTION SAMPAH-NOTIF END                  */
 /* ========================================= */
 
+/* ========================================= */
+/* SECTION DRIVER PROFILE START              */
+/* ========================================= */
+
+.profile-card {
+    background-color: #fff;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(104, 69, 3, 0.05);
+    margin-bottom: 2rem;
+    max-width: 500px; /* Batasi lebar agar fokus */
+}
+
+.profile-card .driver-name {
+    font-family: 'Gilda Display', serif;
+    font-size: 2.2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 0.5rem;
+}
+
+.profile-card p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+/* Badge Status Driver */
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.status-badge.active {
+    background-color: #dcfce7; /* Hijau muda */
+    color: #16a34a; /* Hijau tua */
+    border: 1px solid #16a34a;
+}
+/* Tambahkan .status-badge.inactive, .status-badge.on-duty jika diperlukan */
+
+/* --- Performance Metrics Grid --- */
+.performance-metrics {
+    display: grid;
+    /* 3 kolom untuk metrik */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.metric-card {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s;
+    border-top: 5px solid; /* Garis aksen di atas kartu */
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.metric-card h3 {
+    font-size: 1rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.metric-card .metric-value {
+    display: block;
+    font-family: 'Gilda Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.metric-card .metric-detail {
+    font-size: 0.85rem;
+    color: #aaa;
+}
+
+/* Warna Aksen Card Metrics (Konsisten dengan Admin Dashboard) */
+.metric-card.primary { border-top-color: var(--primary-color); }
+.metric-card.warning { border-top-color: #eab308; }
+.metric-card.info { border-top-color: #3498db; }
+
+
+/* Responsif */
+@media (max-width: 768px) {
+    .profile-card {
+        padding: 1.5rem;
+        max-width: 100%;
+    }
+
+    .profile-card .driver-name {
+        font-size: 1.8rem;
+    }
+
+    .performance-metrics {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+/* ========================================= */
+/* SECTION DRIVER PROFILE END                */
+/* ========================================= */
+
 /* MAP SAMPAH */
 .map-sampah iframe {
     width: 100% !important;

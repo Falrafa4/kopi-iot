@@ -1,38 +1,29 @@
 <!-- INI HALAMAN DASHBOARD ADMIN -->
 <?php
 require_once "../../../config/db.php";
-require_once '../../../functions/sensor.php';
-require_once '../../../functions/toko.php';
+require_once '../../../functions/produk.php';
 
 if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
     header('Location: ../../../auth/login/');
     exit();
 }
 
-$nama_sensor = '';
-$id_toko = '';
-$suhu = '';
-$kelembapan = '';
-$volume = '';
-$selesai = '';
-$prediksi_selesai = '';
-$status = '';
+$nama_produk = '';
+$harga = '';
+$stok = '';
+$gambar = '';
 
 if (isset($_GET['id'])) {
-    $id_sensor = $_GET['id'];
-    $sensor = getSensorById($id_sensor);
+    $produk_id = $_GET['id'];
+    $produk = getProdukById($produk_id);
 
-    if (!$sensor) {
-        $_SESSION['error'] = "Sensor tidak ditemukan.";
+    if (!$produk) {
+        $_SESSION['error'] = "Produk tidak ditemukan.";
     } else {
-        $nama_sensor = $sensor['nama_sensor'];
-        $id_toko = $sensor['id_toko'];
-        $suhu = $sensor['suhu'];
-        $kelembapan = $sensor['kelembapan'];
-        $volume = $sensor['volume'];
-        $selesai = $sensor['selesai'];
-        $prediksi_selesai = $sensor['prediksi_selesai'];
-        $status = $sensor['status'];
+        $nama_produk = $produk['nama_produk'];
+        $harga = $produk['harga'];
+        $stok = $produk['stok'];
+        $gambar = $produk['gambar'];
     }
 }
 ?>
@@ -70,25 +61,23 @@ if (isset($_GET['id'])) {
         <?php include '../../../includes/admin_aside.php'; ?>
         <main>
             <section class="kelola user">
-                <h1><?= isset($_GET['id']) ? 'Edit' : 'Tambah' ?> Sensor</h1>
+                <h1><?= isset($_GET['id']) ? 'Edit' : 'Tambah' ?> Produk</h1>
                 <hr class="line-break">
-                <form action="/dashboard/admin/manage_sensor/process.php" method="POST" class="form-kelola">
+                <form action="/dashboard/admin/manage_users/process.php" method="POST" class="form-kelola">
                     <?php if (isset($_GET['id'])): ?>
-                        <input type="hidden" name="id_sensor" value="<?= htmlspecialchars($_GET['id']) ?>">
+                        <input type="hidden" name="id_produk" value="<?= htmlspecialchars($_GET['id']) ?>">
                     <?php endif; ?>
-                    <label for="nama_sensor">Nama Sensor:</label>
-                    <input type="text" id="nama_sensor" name="nama_sensor" value="<?= $nama_sensor ?>" required>
+                    <label for="nama">Nama Produk:</label>
+                    <input type="text" id="nama" name="nama" value="<?= $nama_produk ?>" required>
 
-                    <label for="id_toko">Pilih Toko:</label>
-                    <select name="id_toko" id="id_toko">
-                        <?php
-                        $toko_list = getAllToko(); // Fungsi untuk mendapatkan semua toko
-                        foreach ($toko_list as $toko) {
-                            $selected = ($toko['id_toko'] == $id_toko) ? 'selected' : '';
-                            echo "<option value=\"" . htmlspecialchars($toko['id_toko']) . "\" $selected>" . htmlspecialchars($toko['nama_toko']) . "</option>";
-                        }
-                        ?>
-                    </select>
+                    <label for="harga">Harga:</label>
+                    <input type="text" id="harga" name="harga" value="<?= $harga ?>" required>
+
+                    <label for="stok">Stok:</label>
+                    <input type="number" id="stok" name="stok" value="<?= $stok ?>" required>
+
+                    <label for="gambar">Gambar:</label>
+                    <input type="file" id="gambar" name="gambar" value="<?= $gambar ?>" required>
 
                     <div class="btn-group">
                         <a href="./">
@@ -116,12 +105,7 @@ if (isset($_GET['id'])) {
     </div>
     <!-- KONTEN END -->
 
-    <!-- FOOTER -->
-    <?php //include '../../../includes/footer.php'; 
-    ?>
-    <!-- FOOTER END -->
-
-    <!-- <script src="../../../assets/js/script.js"></script> -->
+    <script src="../../../assets/js/script.js"></script>
 </body>
 
 </html>

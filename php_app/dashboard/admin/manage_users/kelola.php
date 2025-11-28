@@ -34,8 +34,16 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kopi IoT - Dashboard Admin</title>
-    <link rel="stylesheet" href="../../../assets/style/global.css">
-    <link rel="stylesheet" href="../../../assets/style/admin.css">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/assets/style/global.css">
+    <link rel="stylesheet" href="/assets/style/admin.css">
 
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,7 +61,7 @@ if (isset($_GET['id'])) {
         <?php include '../../../includes/admin_aside.php'; ?>
         <main>
             <section class="kelola user">
-                <h1>Tambah Users</h1>
+                <h1><?= isset($_GET['id']) ? 'Edit' : 'Tambah' ?> Users</h1>
                 <hr class="line-break">
                 <form action="/dashboard/admin/manage_users/process.php" method="POST" class="form-kelola">
                     <?php if (isset($_GET['id'])): ?>
@@ -102,11 +110,7 @@ if (isset($_GET['id'])) {
     </div>
     <!-- KONTEN END -->
 
-    <!-- FOOTER -->
-    <?php //include '../../../includes/footer.php'; ?>
-    <!-- FOOTER END -->
-
-    <!-- <script src="../../../assets/js/script.js"></script> -->
+    <script src="../../../assets/js/script.js"></script>
 </body>
 
 </html>

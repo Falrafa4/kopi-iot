@@ -7,7 +7,7 @@ main {
     /* Padding konsisten dengan global main, untuk memberikan ruang napas */
     max-width: 100%;
     margin: 0 auto;
-    padding: 3rem 10% 6rem 10%;
+    padding: 6rem 10% 6rem 10%;
 }
 
 main h1 {
@@ -120,6 +120,12 @@ p.history {
     background-color: rgba(39, 174, 96, 0.1);
     color: #27ae60;
     border: 1px solid rgba(39, 174, 96, 0.2);
+}
+
+.status-warning {
+    background-color: rgba(243, 156, 18, 0.1);
+    color: #f39c12;
+    border: 1px solid rgba(243, 156, 18, 0.2);
 }
 
 .status-danger {

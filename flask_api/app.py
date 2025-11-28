@@ -11,41 +11,36 @@ def save_to_db(data):
     cur = db.cursor()
 
     # menyimpan log/histori data sensor
-    sql_add = """
-    INSERT INTO sensor_log (id_sensor, suhu, kelembapan, volume, selesai, prediksi_selesai)
-    VALUES (%s, %s, %s, %s, %s, %s)
-    """
+    # sql_add = """
+    # INSERT INTO sensor_log (id_sensor, suhu, kelembapan, volume, selesai, prediksi_selesai)
+    # VALUES (%s, %s, %s, %s, %s, %s)
+    # """
 
     # update data sensor dengan id_sensor = 1
     sql_update = """
-    UPDATE sensor SET suhu=%s, kelembapan=%s, volume=%s, selesai=%s, lat=%s, lng=%s, prediksi_selesai=%s
+    UPDATE sensor SET suhu=%s, kelembapan=%s, volume=%s, status=%s, selesai=%s, prediksi_selesai=%s
     WHERE id_sensor=1
     """
 
-    volume_box = (24 - data['volume'])*18*21 # dalam cm3
-    data['volume'] = (data['volume'] / volume_box) * 100
-
     cur.execute(sql_update, (
-        data['id_toko'],
         data['suhu'],
         data['kelembapan'],
         data['volume'],
+        data['status'],
         data['selesai'],
-        data['gps_lat'],
-        data['gps_lon'],
         data['prediksi']
     ))
 
-    cur.execute(sql_add, (
-        1,
-        data['suhu'],
-        data['kelembapan'],
-        data['volume'],
-        data['selesai'],
-        data['gps_lat'],
-        data['gps_lon'],
-        data['prediksi']
-    ))
+    # cur.execute(sql_add, (
+    #     1,
+    #     data['suhu'],
+    #     data['kelembapan'],
+    #     data['volume'],
+    #     data['selesai'],
+    #     data['gps_lat'],
+    #     data['gps_lon'],
+    #     data['prediksi']
+    # ))
 
     db.commit()
     cur.close()
@@ -56,18 +51,17 @@ def save_to_db(data):
 def upload():
     data = request.json
 
-    prediksi = predict_finish_time(
-        data["suhu"],
-        data["kelembapan"],
-        data["volume"]
-    )
+    # prediksi = predict_finish_time(
+    #     data["suhu"],
+    #     data["kelembapan"],
+    #     data["volume"]
+    # )
 
-    data['prediksi'] = prediksi
+    data['prediksi'] = 10  # sementara pakai nilai tetap dulu
 
     save_to_db(data)
 
-    return jsonify({"status": "OK", "prediksi": prediksi})
-
+    return jsonify({"status": "OK", "prediksi": data['prediksi']})
 @app.route('/data/latest')
 def latest_data():
     db = get_db()

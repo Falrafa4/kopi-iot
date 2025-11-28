@@ -8,7 +8,7 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'pembeli') {
 }
 
 // user sementara (prototype)
-$id_user = 2;
+$id_user = $_SESSION['data']['id_user'];
 
 $query = $conn->query("SELECT * FROM toko");
 $toko_all = $query->fetch_all(MYSQLI_ASSOC);
@@ -25,8 +25,16 @@ $notifikasi = $query_notif->fetch_all(MYSQLI_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kopi IoT - Dashboard Pembeli</title>
-    <link rel="stylesheet" href="../../assets/style/global.css">
-    <link rel="stylesheet" href="../../assets/style/dashboard.css">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/assets/style/global.css">
+    <link rel="stylesheet" href="/assets/style/pembeli.css">
 
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

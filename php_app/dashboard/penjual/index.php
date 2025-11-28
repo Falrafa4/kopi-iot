@@ -4,6 +4,8 @@ include '../../config/db.php';
 include '../../functions/toko.php';
 include '../../functions/kesimpulan.php';
 
+$volume_wadah = 9072; //dalam ml/cm3
+
 if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'penjual') {
     header('Location: ../../auth/login/');
     exit();
@@ -23,8 +25,16 @@ $json = $result->fetch_assoc();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kopi IoT - Dashboard Penjual</title>
-    <link rel="stylesheet" href="../../assets/style/global.css">
-    <link rel="stylesheet" href="../../assets/style/penjual.css">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/assets/style/global.css">
+    <link rel="stylesheet" href="/assets/style/penjual.css">
 
     <!-- FONT -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,8 +74,21 @@ $json = $result->fetch_assoc();
                 <div class="summary">
                     <h2>Status Ampas Kopi</h2>
                     <hr>
-                    <p class="badge-status <?= $json['status'] == 'Ready' ? 'status-success' : 'status-danger' ?>"><?= $json['status'] == 'Ready' ? 'Siap Diambil' : 'Belum Siap' ?></p>
-                    <p class="status-text"><?= kesimpulan($json['suhu'], $json['kelembapan'], $json['volume'], $json['prediksi_selesai']) ?></p>
+                    <?php
+                    // menentukan status ampas kopi
+                    if ($json['status'] == 'ready') {
+                        $class_status = 'status-success';
+                        $status_text = 'Siap Diambil';
+                    } elseif ($json['status'] == 'almost ready') {
+                        $class_status = 'status-warning';
+                        $status_text = 'Hampir Siap';
+                    } else {
+                        $class_status = 'status-danger';
+                        $status_text = 'Belum Siap';
+                    }
+                    ?>
+                    <p class="badge-status <?= $class_status ?>"><?= htmlspecialchars($status_text) ?></p>
+                    <p class="status-text"><?= kesimpulan($json['suhu'], $json['kelembapan'], $json['prediksi_selesai']) ?></p>
                     <?php
                     $prediksi_selesai = $json['prediksi_selesai'];
                     $prediksi_tanggal = date("d M Y", strtotime("+$prediksi_selesai days"));
@@ -96,7 +119,7 @@ $json = $result->fetch_assoc();
                                 </div>
                                 <div class="sensor-box">
                                     <h3>Volume</h3>
-                                    <p><?= $json['volume'] == '' ? '-' : htmlspecialchars($json['volume']) ?> g</p>
+                                    <p><?= $json['volume'] == '' ? '-' : htmlspecialchars($json['volume']) ?> %</p>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +139,7 @@ $json = $result->fetch_assoc();
                     <p class="keuntungan-text">Berdasarkan data volume pada ampas kopi, perkiraan keuntungan Anda untuk penyetoran ampas kopi adalah:</p>
                     <?php
                     // Dummy calculation for estimated profit
-                    $estimated_profit = $json['volume'] * 2000; // Ganti dengan logika perhitungan
+                    $estimated_profit = $json['volume'] * ($volume_wadah / 100) * 0.3; // Ganti dengan logika perhitungan
                     ?>
                     <p class="profit">Rp <?= number_format($estimated_profit, 0, ',', '.') ?></p>
                 </div>

@@ -19,6 +19,14 @@ function hasTokoByIdUser($id_user) {
     return $result['count'] > 0;
 }
 
+function getLocationTokoByIdUser($id_user) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT lat, lng FROM toko WHERE id_penjual = ?");
+    $stmt->bind_param("i", $id_user);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_assoc();
+}
+
 function getAllToko() {
     global $conn;
     $stmt = $conn->query("SELECT * FROM toko");

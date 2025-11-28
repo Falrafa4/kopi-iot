@@ -9,7 +9,7 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
 }
 
 // Fetch semua toko
-$query = $conn->query("SELECT * FROM toko");
+$query = $conn->query("SELECT * FROM toko JOIN users ON toko.id_penjual = users.id_user");
 $toko_all = $query->fetch_all(MYSQLI_ASSOC);
 
 // if (isset($_GET['delete'])) {
@@ -30,13 +30,32 @@ $toko_all = $query->fetch_all(MYSQLI_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kopi IoT - Dashboard Admin</title>
-    <link rel="stylesheet" href="../../../assets/style/global.css">
-    <link rel="stylesheet" href="../../../assets/style/admin.css">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/assets/style/global.css">
+    <link rel="stylesheet" href="/assets/style/admin.css">
 
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        .pemilik {
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #555;
+            margin-top: 1rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -82,6 +101,12 @@ $toko_all = $query->fetch_all(MYSQLI_ASSOC);
                             <div class="desc">
                                 <h3><?= strtoupper($toko['nama_toko']) ?></h3>
                                 <p><?= htmlspecialchars($toko['alamat']) ?></p>
+                                <p class="pemilik">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#684503">
+                                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q14-36 44-58t68-22q38 0 68 22t44 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm280-670q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-246q54-53 125.5-83.5T480-360q83 0 154.5 30.5T760-246v-514H200v514Zm280-194q58 0 99-41t41-99q0-58-41-99t-99-41q-58 0-99 41t-41 99q0 58 41 99t99 41ZM280-200h400v-10q-42-35-93-52.5T480-280q-56 0-107 17.5T280-210v10Zm200-320q-25 0-42.5-17.5T420-580q0-25 17.5-42.5T480-640q25 0 42.5 17.5T540-580q0 25-17.5 42.5T480-520Zm0 17Z" />
+                                    </svg>
+                                    <?= htmlspecialchars($toko['nama']) ?>
+                                </p>
                             </div>
                         </div>
                     <?php endforeach; ?>

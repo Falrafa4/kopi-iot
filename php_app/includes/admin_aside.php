@@ -12,6 +12,7 @@ $namaFolder2 = $explode[count($explode) - 2];
         <li><a href="/dashboard/admin/manage_users/" class="<?= ($namaFolder === 'manage_users') ? 'active' : '' ?>">Manage Users</a></li>
         <li><a href="/dashboard/admin/manage_toko/" class="<?= ($namaFolder === 'manage_toko') ? 'active' : '' ?>">Manage Toko</a></li>
         <li><a href="/dashboard/admin/manage_sensor/" class="<?= ($namaFolder === 'manage_sensor') ? 'active' : '' ?>">Manage Sensor</a></li>
+        <li><a href="/dashboard/admin/manage_produk/" class="<?= ($namaFolder === 'manage_produk') ? 'active' : '' ?>">Manage Produk</a></li>
         <li><a href="/dashboard/admin/reports/" class="<?= ($namaFolder === 'reports') ? 'active' : '' ?>">Reports</a></li>
     </ul>
 </aside>

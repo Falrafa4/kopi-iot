@@ -6,6 +6,14 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
     header('Location: ../../auth/login/');
     exit();
 }
+
+$count_toko_query = "SELECT COUNT(*) AS total_toko FROM toko";
+$result_toko = $conn->query($count_toko_query);
+$total_toko = $result_toko->fetch_assoc()['total_toko'];
+
+$count_users_query = "SELECT COUNT(*) AS total_users FROM users WHERE role IN ('penjual', 'pembeli', 'driver')";
+$result_users = $conn->query($count_users_query);
+$total_users = $result_users->fetch_assoc()['total_users'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,8 +22,16 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kopi IoT - Dashboard Admin</title>
-    <link rel="stylesheet" href="../../assets/style/global.css">
-    <link rel="stylesheet" href="../../assets/style/admin.css">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/assets/style/global.css">
+    <link rel="stylesheet" href="/assets/style/admin.css">
 
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,8 +62,8 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
         }
 
         .metric-card h3 {
-            font-size: 1rem;
-            color: #888;
+            font-size: 1.2rem;
+            color: #5c5c5c;
             margin-bottom: 0.5rem;
             font-weight: 500;
         }
@@ -62,7 +78,7 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
 
         .metric-card .description {
             font-size: 0.85rem;
-            color: #aaa;
+            color: #5c5c5c;
             margin-top: 0.5rem;
         }
 
@@ -114,7 +130,6 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
 
         .card-box.full-width {
             grid-column: 1 / -1;
-            /* Mengambil lebar penuh (12/12) */
         }
 
         /* 3. Activity List */
@@ -137,7 +152,7 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
             align-items: center;
             gap: 10px;
             font-weight: 500;
-            color: #555;
+            color: #5c5c5c;
             transition: background-color 0.2s;
         }
 
@@ -199,14 +214,14 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
                 <h2>Status Sistem</h2>
                 <div class="metrics-grid">
                     <div class="metric-card primary">
-                        <h3>Total Toko</h3>
-                        <span class="value">45</span>
+                        <h3>Total Toko Aktif</h3>
+                        <span class="value"><?= htmlspecialchars($total_toko) ?></span>
                         <p class="description">Penyedia ampas terdaftar</p>
                     </div>
                     <div class="metric-card warning">
-                        <h3>Sampah Kritis</h3>
-                        <span class="value">5</span>
-                        <p class="description">Perlu segera diangkut</p>
+                        <h3>Pengguna Aktif</h3>
+                        <span class="value"><?= htmlspecialchars($total_users) ?></span>
+                        <p class="description">Total pengguna aktif KOPI IoT (Penjual, pembeli, driver)</p>
                     </div>
                 </div>
             </section>
@@ -249,6 +264,7 @@ if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
     <!-- KONTEN END -->
 
     <script src="../../assets/js/script.js"></script>
+    <script src="/dummy/dummy_sender.js"></script>
 </body>
 
 </html>

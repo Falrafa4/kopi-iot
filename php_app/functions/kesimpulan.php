@@ -1,102 +1,64 @@
 <?php
 
+// --- FUNGSI KATEGORI TETAP SAMA ---
+
 function kategoriSuhu($suhu) {
-    if ($suhu <= 20) return "dingin";
-    if ($suhu <= 30) return "normal";
-    return "panas";
+    if ($suhu <= 20) return "ideal"; 
+    if ($suhu <= 30) return "ideal";
+    return "panas"; // Saya ubah labelnya biar lebih jelas konteksnya
 }
 
-function kategoriKelembapan($hum) {
-    if ($hum <= 40) return "rendah";
-    if ($hum <= 70) return "normal";
-    return "tinggi";
+function kategoriKelembapan($hum) { 
+    if ($hum >= 40 && $hum <= 50) return "ideal";
+    if ($hum <= 79) return "hampir jadi"; // Terlalu kering atau agak basah dikit
+    if ($hum >= 80) return "basah"; // Terlalu basah (>80)
 }
 
+// Fungsi Volume dipisah, hanya untuk Display di Dashboard, tidak masuk logika kesimpulan
 function kategoriVolume($vol) {
-    if ($vol < 20) return "sedikit";
-    if ($vol <= 50) return "cukup";
-    return "banyak";
+    if ($vol <= 20) return "sedikit";
+    if ($vol <= 50) return "hampir penuh";
+    if ($vol <= 100) return "penuh";
 }
 
-function kesimpulan($suhu, $hum, $vol, $predict) {
+// --- LOGIKA BARU (HANYA SUHU & KELEMBAPAN) ---
+
+function kesimpulan($suhu, $hum, $predict) {
     $s = kategoriSuhu($suhu);
     $h = kategoriKelembapan($hum);
-    $v = kategoriVolume($vol);
+    
+    // Kita hanya punya 2 (Suhu) x 3 (Kelembapan) = 6 KEMUNGKINAN
 
-    if (empty($suhu) || empty($hum) || empty($vol) || empty($predict)) {
-        return "Data sensor belum ada. Harap atur sensor terlebih dahulu.";
+    // 1. KONDISI TERBAIK (GOLDEN STANDARD)
+    if ($s == "ideal" && $h == "ideal") {
+        return "STATUS: SIAP OLAH (PRIMA). Kualitas ampas kopi sempurna! Suhu dingin stabil dan kelembapan sangat pas. Sangat direkomendasikan untuk segera diolah. Harap menunggu driver untuk penjemputan.";
     }
 
-    // ✔ Semua kombinasi SUHU x KELEMBAPAN x VOLUME (27 total)
-    $rules = [
+    // 2. KONDISI BAIK (STANDARD)
+    if ($s == "ideal" && $h == "hampir jadi") {
+        return "STATUS: SIAP OLAH (STANDARD). Kondisi suhu aman. Kelembapan sedikit meleset dari target ideal namun masih sangat layak untuk diproses lanjut. Harap menunggu driver untuk penjemputan.";
+    }
 
-        // ========================
-        // SUHU DINGIN
-        // ========================
-        "dingin-rendah-sedikit" => "Ampas kopi berada pada kondisi terlalu dingin dan sangat kering dengan volume yang masih sangat sedikit. Proses fermentasi berjalan sangat lambat. Prediksi dapat diambil: $predict hari.",
+    // 3. KONDISI DINGIN TAPI BASAH
+    if ($s == "ideal" && $h == "basah") {
+        return "STATUS: BELUM SIAP (TERLALU BASAH). Suhu aman, tetapi kadar air terlalu tinggi. Berisiko jamur jika tidak dikeringkan dulu. Tidak disarankan langsung masuk pengolahan utama. (Estimasi truk: $predict hari)";
+    }
 
-        "dingin-rendah-cukup" => "Ampas kopi terlalu dingin dan kering. Meskipun volumenya cukup, kelembapan rendah membuat proses berjalan lambat. Disarankan menambah kelembapan. Prediksi dapat diambil: $predict hari.",
+    // 4. KONDISI PANAS TAPI KERING
+    if ($s == "panas" && $h == "ideal") {
+        return "STATUS: WARNING (SUHU TINGGI). Kelembapan bagus, tapi suhu terdeteksi panas. Kemungkinan terjadi fermentasi liar atau wadah terpapar panas eksternal. Perlu pendinginan. (Estimasi truk: $predict hari)";
+    }
 
-        "dingin-rendah-banyak" => "Ampas kopi dalam kondisi dingin dan kelembapan rendah meskipun volumenya banyak. Proses cenderung tertahan di awal fermentasi. Perlu penyesuaian lingkungan. Prediksi dapat diambil: $predict hari.",
+    // 5. KONDISI PANAS DAN KURANG PAS
+    if ($s == "panas" && $h == "hampir jadi") {
+        return "STATUS: KURANG STABIL. Suhu panas dan kelembapan tidak ideal. Kualitas ampas kopi menurun. Perlu pemeriksaan ventilasi wadah. (Estimasi truk: $predict hari)";
+    }
 
-        "dingin-normal-sedikit" => "Suhu rendah dengan kelembapan normal tetapi volume sangat sedikit membuat proses kurang optimal. Disarankan menambah volume. Prediksi dapat diambil: $predict hari.",
+    // 6. KONDISI KRITIS (PANAS & BASAH)
+    if ($s == "panas" && $h == "basah") {
+        return "STATUS: BAHAYA (RISIKO PEMBUSUKAN). Kombinasi suhu panas dan sangat basah memicu pembusukan anaerob (bau busuk). Kualitas buruk untuk diolah. (Estimasi truk: $predict hari)";
+    }
 
-        "dingin-normal-cukup" => "Ampas kopi berada pada suhu dingin dengan kelembapan yang cukup baik. Proses berjalan lambat namun stabil. Prediksi dapat diambil: $predict hari.",
-
-        "dingin-normal-banyak" => "Suhu dingin dan kelembapan normal dengan volume banyak menghasilkan proses yang stabil namun lambat. Prediksi dapat diambil: $predict hari.",
-
-        "dingin-tinggi-sedikit" => "Lingkungan dingin namun kelembapan terlalu tinggi dengan volume sedikit dapat menyebabkan penyerapan kelembapan berlebih. Perlu pengaturan ulang. Prediksi dapat diambil: $predict hari.",
-
-        "dingin-tinggi-cukup" => "Ampas kopi berada pada suhu dingin dengan kelembapan tinggi. Proses fermentasi mungkin tidak stabil. Perlu menjaga kelembapan. Prediksi dapat diambil: $predict hari.",
-
-        "dingin-tinggi-banyak" => "Suhu dingin dengan kelembapan tinggi dan volume banyak berpotensi menyebabkan penumpukan air. Pastikan ventilasi baik. Prediksi dapat diambil: $predict hari.",
-
-
-        // ========================
-        // SUHU NORMAL
-        // ========================
-        "normal-rendah-sedikit" => "Ampas kopi pada suhu normal namun kelembapan rendah dan volume sedikit membuat proses berjalan tidak maksimal. Disarankan menambah volume dan kelembapan. Prediksi dapat diambil: $predict hari.",
-
-        "normal-rendah-cukup" => "Suhu stabil namun kelembapan rendah dapat memperlambat proses meskipun volume cukup. Perlu penyesuaian kelembapan. Prediksi dapat diambil: $predict hari.",
-
-        "normal-rendah-banyak" => "Suhu ideal namun kelembapan rendah dengan volume besar dapat menurunkan kualitas fermentasi. Tambah kelembapan untuk hasil optimal. Prediksi dapat diambil: $predict hari.",
-
-        "normal-normal-sedikit" => "Kondisi suhu dan kelembapan ideal, tetapi volume masih terlalu sedikit untuk proses optimal. Disarankan menambah volume. Prediksi dapat diambil: $predict hari.",
-
-        "normal-normal-cukup" => "Ampas kopi berada pada kondisi ideal dan stabil. Volume cukup dan proses berjalan normal tanpa hambatan berarti. Prediksi dapat diambil: $predict hari.",
-
-        "normal-normal-banyak" => "Ampas kopi berada pada kondisi sangat ideal dengan volume banyak, sehingga proses berjalan stabil dan efisien. Prediksi dapat diambil: $predict hari.",
-
-        "normal-tinggi-sedikit" => "Kelembapan terlalu tinggi meskipun suhu normal. Volume yang sedikit membuat ampas menyerap kelembapan berlebih. Perlu diperhatikan. Prediksi dapat diambil: $predict hari.",
-
-        "normal-tinggi-cukup" => "Suhu ideal namun kelembapan terlalu tinggi dapat menyebabkan fermentasi berjalan tidak stabil. Perlu ventilasi tambahan. Prediksi dapat diambil: $predict hari.",
-
-        "normal-tinggi-banyak" => "Ampas kopi dalam kondisi lembap berlebih dengan volume besar. Risiko pertumbuhan jamur meningkat. Perhatikan kelembapan. Prediksi dapat diambil: $predict hari.",
-
-
-        // ========================
-        // SUHU PANAS
-        // ========================
-        "panas-rendah-sedikit" => "Suhu terlalu panas dengan kelembapan rendah serta volume sedikit dapat membuat ampas cepat mengering. Proses tidak berjalan baik. Prediksi dapat diambil: $predict hari.",
-
-        "panas-rendah-cukup" => "Suhu panas dan kelembapan rendah membuat ampas mudah kering meskipun volumenya cukup. Perlu penyesuaian suhu. Prediksi dapat diambil: $predict hari.",
-
-        "panas-rendah-banyak" => "Suhu panas berpotensi mengurangi kualitas meskipun volume cukup banyak. Tambah kelembapan untuk menjaga stabilitas. Prediksi dapat diambil: $predict hari.",
-
-        "panas-normal-sedikit" => "Suhu panas namun kelembapan normal dengan volume sedikit dapat membuat bagian luar cepat kering. Perlu perhatian. Prediksi dapat diambil: $predict hari.",
-
-        "panas-normal-cukup" => "Suhu panas membuat proses fermentasi tidak stabil meskipun kelembapan dan volume cukup baik. Pastikan suhu diturunkan. Prediksi dapat diambil: $predict hari.",
-
-        "panas-normal-banyak" => "Suhu panas dengan volume besar dapat membuat fermentasi berlebihan. Perlu pengaturan ulang suhu. Prediksi dapat diambil: $predict hari.",
-
-        "panas-tinggi-sedikit" => "Kondisi sangat tidak ideal: suhu panas dan kelembapan tinggi dengan volume sedikit berisiko menghasilkan ampas berjamur. Perlu penanganan segera. Prediksi dapat diambil: $predict hari.",
-
-        "panas-tinggi-cukup" => "Ampas kopi dalam kondisi terlalu panas dan lembap, yang dapat mempercepat pembusukan. Segera sesuaikan lingkungan. Prediksi dapat diambil: $predict hari.",
-
-        "panas-tinggi-banyak" => "Lingkungan sangat panas dan lembap dengan volume banyak berpotensi memicu fermentasi berlebihan dan pembusukan cepat. Kondisi sangat tidak direkomendasikan. Prediksi dapat diambil: $predict hari.",
-    ];
-
-    $key = "$s-$h-$v";
-
-    return $rules[$key] ?? "Data tidak dapat ditentukan. Periksa kembali sensor.";
+    return "Menunggu pembacaan sensor...";
 }
+?>

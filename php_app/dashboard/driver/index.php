@@ -15,8 +15,20 @@ $query = $conn->query("SELECT * FROM toko");
 $toko_all = $query->fetch_all(MYSQLI_ASSOC);
 
 // Fetch notifikasi
-$query_notif = $conn->query("SELECT toko.id_toko, toko.nama_toko, sensor.status, sensor.prediksi_selesai FROM sensor
-JOIN toko ON sensor.id_toko = toko.id_toko");
+$query_notif = $conn->query("SELECT toko.id_toko, toko.nama_toko, sensor.status, sensor.prediksi_selesai
+FROM sensor
+JOIN toko ON sensor.id_toko = toko.id_toko
+ORDER BY
+    CASE status
+        WHEN 'Ready' THEN 1
+        WHEN 'Not Ready' THEN 2
+        WHEN 'Empty' THEN 3
+        ELSE 4
+    END,
+    CASE 
+        WHEN status = 'Not Ready' THEN prediksi_selesai
+        ELSE waktu_update
+    END ASC;");
 $notifikasi = $query_notif->fetch_all(MYSQLI_ASSOC);
 
 // fetch data pengambilan driver
@@ -24,7 +36,7 @@ $query_driver = $conn->prepare("SELECT * FROM driver WHERE id_user = ?");
 $query_driver->bind_param("i", $id_user);
 $query_driver->execute();
 $result_driver = $query_driver->get_result();
-$driver = $result_driver->fetch_assoc();    
+$driver = $result_driver->fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,13 +45,28 @@ $driver = $result_driver->fetch_assoc();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kopi IoT - Dashboard Driver</title>
-    <link rel="stylesheet" href="../../assets/style/global.css">
-    <link rel="stylesheet" href="../../assets/style/driver.css">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/assets/style/global.css">
+    <link rel="stylesheet" href="/assets/style/driver.css">
 
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        #home {
+            scroll-margin-top: 15rem;
+            /* tinggi navbar */
+        }
+    </style>
 </head>
 
 <body>
@@ -77,11 +104,11 @@ $driver = $result_driver->fetch_assoc();
                             }
 
                             foreach ($notifikasi as $notif) :
-                                if ($notif['status'] == 'Empty'):
-                                    $class = 'success';
-                                    $message = "Ampas kopi di <strong>" . htmlspecialchars($notif['nama_toko']) . "</strong> baru diganti. Tempat sampah kosong.";
-                                elseif ($notif['status'] == 'Ready'):
+                                if ($notif['status'] == 'almost ready'):
                                     $class = 'warning';
+                                    $message = "Ampas kopi di <strong>" . htmlspecialchars($notif['nama_toko']) . "</strong> hampir siap.";
+                                elseif ($notif['status'] == 'ready'):
+                                    $class = 'success';
                                     $message = "Ampas kopi di <strong>" . htmlspecialchars($notif['nama_toko']) . "</strong> sudah penuh. Segera diambil.";
                                 else:
                                     $class = 'danger';
@@ -143,10 +170,33 @@ $driver = $result_driver->fetch_assoc();
         <div id="profile" class="tab-content">
             <h1>Profile Driver</h1>
             <hr class="line-break">
+
             <div class="profile-card">
-                <h2><?= htmlspecialchars($_SESSION['data']['nama']) ?></h2>
+                <h2 class="driver-name"><?= htmlspecialchars($_SESSION['data']['nama']) ?></h2>
                 <p><strong>Username:</strong> <?= htmlspecialchars($_SESSION['data']['username']) ?></p>
                 <p><strong>Role:</strong> <?= htmlspecialchars($_SESSION['data']['role']) ?></p>
+                <p class="badge-status status-active" style="width: fit-content;">Status: Aktif</p>
+            </div>
+
+            <h2 class="mt-4">Kinerja & Pendapatan</h2>
+            <div class="performance-metrics">
+                <div class="metric-card today primary">
+                    <h3>Pendapatan Hari Ini</h3>
+                    <span class="metric-value">Rp 30.000</span>
+                    <p class="metric-detail">Dari 100.000 mL Ampas Kopi</p>
+                </div>
+
+                <div class="metric-card monthly warning">
+                    <h3>Total Volume Bulan Ini</h3>
+                    <span class="metric-value">250 L</span>
+                    <p class="metric-detail">Sama dengan Rp 75.000</p>
+                </div>
+
+                <div class="metric-card complete info">
+                    <h3>Tugas Selesai (Total)</h3>
+                    <span class="metric-value">85</span>
+                    <p class="metric-detail">Tingkat keberhasilan 95%</p>
+                </div>
             </div>
         </div>
     </main>

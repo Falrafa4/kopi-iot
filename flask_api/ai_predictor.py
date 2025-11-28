@@ -8,14 +8,14 @@ model = "gemini-2.0-flash"
 
 def predict_finish_time(suhu, kelembapan, volume):
     prompt = f"""
-    Anda adalah seorang ahli AI yang membantu memprediksi waktu penyelesaian pembuatan pupuk dari ampas kopi berdasarkan data sensor.
+    Anda adalah seorang ahli AI yang membantu memprediksi waktu penyelesaian kestabilan dari ampas kopi berdasarkan data sensor.
 
     Data sensor yang diberikan adalah:
     - Suhu: {suhu} °C
     - Kelembapan: {kelembapan} %
     - Volume/berat ampas kopi: {volume} gr
 
-    Berdasarkan data tersebut, prediksikan dalam hari berapa lama lagi proses pembuatan pupuk akan selesai dan siap dijual. Berikan jawaban Anda dalam format hanya angka hari saja tanpa penjelasan tambahan.
+    Berdasarkan data tersebut, prediksikan dalam hari berapa lama lagi proses yang stabil akan selesai dan siap untuk dikirimkan untuk diolah menjadi pupuk? Berikan jawaban Anda dalam format hanya angka hari saja tanpa penjelasan tambahan.
     """
 
     response = client.models.get(model=model)

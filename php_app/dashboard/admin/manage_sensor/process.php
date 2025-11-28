@@ -1,19 +1,27 @@
 <?php
 require_once '../../../config/db.php';
-require_once '../../../functions/users.php';
+require_once '../../../functions/sensor.php';
+require_once '../../../functions/toko.php';
+
 if (isset($_POST['aksi'])) {
     // CREATE DATA
     if ($_POST['aksi'] === 'add') {
-        $nama = $_POST['nama'];
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $role = $_POST['role'];
+        $nama_sensor = $_POST['nama_sensor'];
+        $id_toko = $_POST['id_toko'];
+        $suhu = null;
+        $kelembapan = null;
+        $volume = null;
+        $selesai = 0;
+        $prediksi_selesai = null;
+        $location = getLocationTokoByIdUser($id_toko);
+        $lat = $location['lat'];
+        $lng = $location['lng'];
     
-        if (insertUser($nama, $username, $password, $role)) {
-            $_SESSION['message'] = 'Data user berhasil ditambahkan.';
+        if (insertSensor($id_toko, $nama_sensor, $suhu, $kelembapan, $volume, $selesai, $lat, $lng, $prediksi_selesai)) {
+            $_SESSION['message'] = 'Data sensor berhasil ditambahkan.';
             header('Location: ./index.php');
         } else {
-            $_SESSION['error'] = 'Error adding user: ' . $stmt->error;
+            $_SESSION['error'] = 'Error adding sensor: ' . $stmt->error;
             header('Location: ./kelola.php');
         }
     
@@ -23,18 +31,15 @@ if (isset($_POST['aksi'])) {
 
     // UPDATE DATA
     if ($_POST['aksi'] === 'edit') {
-        $old_password = getPasswordById($_POST['id_user']);
-        $id = $_POST['id_user'];
-        $nama = $_POST['nama'];
-        $username = $_POST['username'];
-        $password = $_POST['password'] == '' ? $old_password : $_POST['password'];
-        $role = $_POST['role'];
+        $id = $_POST['id_sensor'];
+        $nama_sensor = $_POST['nama_sensor'];
+        $id_toko = $_POST['id_toko'];
     
-        if (updateUser($id, $nama, $username, $password, $role)) {
-            $_SESSION['message'] = 'Data user berhasil diperbarui.';
+        if (updateNameSensor($id, $nama_sensor, $id_toko)) {
+            $_SESSION['message'] = 'Data sensor berhasil diperbarui.';
             header('Location: ./index.php');
         } else {
-            $_SESSION['error'] = 'Error updating user: ' . $stmt->error;
+            $_SESSION['error'] = 'Error updating sensor: ' . $stmt->error;
             header('Location: ./kelola.php');
         }
     
