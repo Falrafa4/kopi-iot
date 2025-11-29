@@ -1,31 +1,19 @@
 <!-- INI HALAMAN DASHBOARD ADMIN -->
 <?php
 require_once "../../../config/db.php";
-require_once '../../../functions/keuntungan.php';
+require_once '../../../functions/pesanan.php';
 
 if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'admin') {
     header('Location: ../../../auth/login/');
     exit();
 }
 
-$keuntungan_key = '';
-$keuntungan_value = '';
-$unit = '';
-$keterangan = '';
-
-if (isset($_GET['id'])) {
-    $id_keuntungan = $_GET['id'];
-    $keuntungan = getKeuntunganById($id_keuntungan);
-
-    if (!$keuntungan) {
-        $_SESSION['error'] = "User tidak ditemukan.";
-    } else {
-        $keuntungan_key = $keuntungan['keuntungan_key'];
-        $keuntungan_value = $keuntungan['keuntungan_value'];
-        $unit = $keuntungan['satuan'];
-        $keterangan = $keuntungan['keterangan'];
-    }
+if (!isset($_GET['id'])) {
+    header("Location: ./index.php");
 }
+
+$id_pesanan = $_GET['id'];
+$pesanan = getPesananById($id_pesanan);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,23 +49,16 @@ if (isset($_GET['id'])) {
         <?php include '../../../includes/admin_aside.php'; ?>
         <main>
             <section class="kelola user">
-                <h1><?= isset($_GET['id']) ? 'Edit' : 'Tambah' ?> Keuntungan</h1>
+                <h1>Edit Status Pesanan</h1>
                 <hr class="line-break">
-                <form action="/dashboard/admin/manage_untung/process.php" method="POST" class="form-kelola">
-                    <?php if (isset($_GET['id'])): ?>
-                        <input type="hidden" name="id_keuntungan" value="<?= htmlspecialchars($_GET['id']) ?>">
-                    <?php endif; ?>
-                    <label for="keuntungan_key">Nama Keuntungan:</label>
-                    <input type="text" id="keuntungan_key" name="keuntungan_key" value="<?= $keuntungan_key ?>" required>
+                <form action="/dashboard/admin/manage_pesanan/process.php" method="POST" class="form-kelola">
+                    <input type="hidden" name="id_pesanan" value="<?= htmlspecialchars($_GET['id']) ?>">
 
-                    <label for="keuntungan_value">Nilai Keuntungan:</label>
-                    <input type="text" id="keuntungan_value" name="keuntungan_value" value="<?= $keuntungan_value ?>" placeholder="Contoh (dengan koma): 7.5, 9.0" required>
-
-                    <label for="unit">Satuan:</label>
-                    <input type="text" id="unit" name="unit" value="<?= $unit ?>" placeholder="Contoh: mL, kg" required>
-
-                    <label for="keterangan">Keterangan:</label>
-                    <input type="text" id="keterangan" name="keterangan" value="<?= $keterangan ?>" placeholder="Opsional">
+                    <label for="status">Pilih Status:</label>
+                    <select name="status" id="status">
+                        <option value="pending" <?= $pesanan['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
+                        <option value="selesai" <?= $pesanan['status'] == 'selesai' ? 'selected' : '' ?>>Selesai</option>
+                    </select>
 
                     <div class="btn-group">
                         <a href="./">
@@ -86,18 +67,10 @@ if (isset($_GET['id'])) {
                             </svg>
                             Kembali
                         </a>
-                        <?php
-                        if (isset($_GET['id'])) { ?>
-                            <button type="submit" name="aksi" value="edit" class="btn-kelola">
-                                <i class="fa-solid fa-floppy-disk"></i>
-                                Simpan Perubahan
-                            </button>
-                        <?php } else { ?>
-                            <button type="submit" name="aksi" value="add" class="btn-kelola">
-                                <i class="fa-solid fa-floppy-disk"></i>
-                                Tambahkan
-                            </button>
-                        <?php } ?>
+                        <button type="submit" name="aksi" value="edit" class="btn-kelola">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            Simpan Perubahan
+                        </button>
                     </div>
                 </form>
             </section>

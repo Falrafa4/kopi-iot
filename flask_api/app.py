@@ -11,10 +11,10 @@ def save_to_db(data):
     cur = db.cursor()
 
     # menyimpan log/histori data sensor
-    # sql_add = """
-    # INSERT INTO sensor_log (id_sensor, suhu, kelembapan, volume, selesai, prediksi_selesai)
-    # VALUES (%s, %s, %s, %s, %s, %s)
-    # """
+    sql_add = """
+    INSERT INTO sensor_log (id_sensor, suhu, kelembapan, volume, selesai, prediksi_selesai)
+    VALUES (%s, %s, %s, %s, %s, %s)
+    """
 
     # update data sensor dengan id_sensor = 1
     sql_update = """
@@ -22,6 +22,7 @@ def save_to_db(data):
     WHERE id_sensor=1
     """
 
+    # update data sensor
     cur.execute(sql_update, (
         data['suhu'],
         data['kelembapan'],
@@ -31,16 +32,17 @@ def save_to_db(data):
         data['prediksi']
     ))
 
-    # cur.execute(sql_add, (
-    #     1,
-    #     data['suhu'],
-    #     data['kelembapan'],
-    #     data['volume'],
-    #     data['selesai'],
-    #     data['gps_lat'],
-    #     data['gps_lon'],
-    #     data['prediksi']
-    # ))
+    # tambahkan data log
+    cur.execute(sql_add, (
+        1,
+        data['suhu'],
+        data['kelembapan'],
+        data['volume'],
+        data['selesai'],
+        data['gps_lat'],
+        data['gps_lon'],
+        data['prediksi']
+    ))
 
     db.commit()
     cur.close()
@@ -51,13 +53,16 @@ def save_to_db(data):
 def upload():
     data = request.json
 
-    # prediksi = predict_finish_time(
-    #     data["suhu"],
-    #     data["kelembapan"],
-    #     data["volume"]
-    # )
+    prediksi = predict_finish_time(
+        data["suhu"],
+        data["kelembapan"],
+        data["volume"]
+    )
 
-    data['prediksi'] = 10  # sementara pakai nilai tetap dulu
+    data['prediksi'] = prediksi
+
+    # sementara pakai nilai tetap dulu (dummy)
+    # data['prediksi'] = 10  
 
     save_to_db(data)
 

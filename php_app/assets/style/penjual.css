@@ -92,7 +92,7 @@ p.history {
 }
 
 .summary .profit {
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: 700;
     color: var(--primary-color);
     font-family: 'Poppins', sans-serif;

@@ -31,32 +31,32 @@ function kesimpulan($suhu, $hum, $predict) {
 
     // 1. KONDISI TERBAIK (GOLDEN STANDARD)
     if ($s == "ideal" && $h == "ideal") {
-        return "STATUS: SIAP OLAH (PRIMA). Kualitas ampas kopi sempurna! Suhu dingin stabil dan kelembapan sangat pas. Sangat direkomendasikan untuk segera diolah. Harap menunggu driver untuk penjemputan.";
+        return "SIAP OLAH. Kualitas ampas kopi sempurna! Suhu dingin stabil dan kelembapan sangat pas. Sangat direkomendasikan untuk segera diolah. Harap menunggu driver untuk penjemputan.";
     }
 
     // 2. KONDISI BAIK (STANDARD)
     if ($s == "ideal" && $h == "hampir jadi") {
-        return "STATUS: SIAP OLAH (STANDARD). Kondisi suhu aman. Kelembapan sedikit meleset dari target ideal namun masih sangat layak untuk diproses lanjut. Harap menunggu driver untuk penjemputan.";
+        return "SIAP OLAH. Kondisi suhu aman. Kelembapan sedikit meleset dari target ideal namun masih sangat layak untuk diproses lanjut. Harap menunggu driver untuk penjemputan.";
     }
 
     // 3. KONDISI DINGIN TAPI BASAH
     if ($s == "ideal" && $h == "basah") {
-        return "STATUS: BELUM SIAP (TERLALU BASAH). Suhu aman, tetapi kadar air terlalu tinggi. Berisiko jamur jika tidak dikeringkan dulu. Tidak disarankan langsung masuk pengolahan utama. (Estimasi truk: $predict hari)";
+        return "BELUM SIAP (TERLALU BASAH). Suhu aman, tetapi kadar air terlalu tinggi. Berisiko jamur jika tidak dikeringkan dulu. Tidak disarankan langsung masuk pengolahan utama. (Estimasi siap diolah: $predict hari)";
     }
 
     // 4. KONDISI PANAS TAPI KERING
     if ($s == "panas" && $h == "ideal") {
-        return "STATUS: WARNING (SUHU TINGGI). Kelembapan bagus, tapi suhu terdeteksi panas. Kemungkinan terjadi fermentasi liar atau wadah terpapar panas eksternal. Perlu pendinginan. (Estimasi truk: $predict hari)";
+        return "WARNING (SUHU TINGGI). Kelembapan bagus, tapi suhu terdeteksi panas. Kemungkinan terjadi fermentasi liar atau wadah terpapar panas eksternal. Perlu pendinginan. (Estimasi siap diolah: $predict hari)";
     }
 
     // 5. KONDISI PANAS DAN KURANG PAS
     if ($s == "panas" && $h == "hampir jadi") {
-        return "STATUS: KURANG STABIL. Suhu panas dan kelembapan tidak ideal. Kualitas ampas kopi menurun. Perlu pemeriksaan ventilasi wadah. (Estimasi truk: $predict hari)";
+        return "KURANG STABIL. Suhu panas dan kelembapan tidak ideal. Kualitas ampas kopi menurun. Perlu pemeriksaan ventilasi wadah. (Estimasi siap diolah: $predict hari)";
     }
 
     // 6. KONDISI KRITIS (PANAS & BASAH)
     if ($s == "panas" && $h == "basah") {
-        return "STATUS: BAHAYA (RISIKO PEMBUSUKAN). Kombinasi suhu panas dan sangat basah memicu pembusukan anaerob (bau busuk). Kualitas buruk untuk diolah. (Estimasi truk: $predict hari)";
+        return "BAHAYA (RISIKO PEMBUSUKAN). Kombinasi suhu panas dan sangat basah memicu pembusukan anaerob (bau busuk). Kualitas buruk untuk diolah. (Estimasi siap diolah: $predict hari)";
     }
 
     return "Menunggu pembacaan sensor...";

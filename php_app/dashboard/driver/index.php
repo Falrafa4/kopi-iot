@@ -1,11 +1,15 @@
 <!-- INI HALAMAN DASHBOARD DRIVER -->
 <?php
 include "../../config/db.php";
+include "../../functions/keuntungan.php";
 
 if (!isset($_SESSION['data']) || $_SESSION['data']['role'] != 'driver') {
     header('Location: ../../login/');
     exit();
 }
+
+// keuntungan driver
+$keuntungan_driver = getKeuntunganByName('Driver');
 
 // user sementara (prototype)
 $id_user = $_SESSION['data']['id_user'];
@@ -20,13 +24,13 @@ FROM sensor
 JOIN toko ON sensor.id_toko = toko.id_toko
 ORDER BY
     CASE status
-        WHEN 'Ready' THEN 1
-        WHEN 'Not Ready' THEN 2
-        WHEN 'Empty' THEN 3
+        WHEN 'ready' THEN 1
+        WHEN 'almost ready' THEN 2
+        WHEN 'not ready' THEN 3
         ELSE 4
     END,
     CASE 
-        WHEN status = 'Not Ready' THEN prediksi_selesai
+        WHEN status = 'not ready' THEN prediksi_selesai
         ELSE waktu_update
     END ASC;");
 $notifikasi = $query_notif->fetch_all(MYSQLI_ASSOC);
@@ -37,10 +41,6 @@ $query_driver->bind_param("i", $id_user);
 $query_driver->execute();
 $result_driver = $query_driver->get_result();
 $driver = $result_driver->fetch_assoc();
-
-// fetch keuntungan driver
-$query_untung = $conn->query("SELECT * FROM keuntungan WHERE keuntungan_key = 'Driver'");
-$keuntungan = $query_untung->fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -178,14 +178,14 @@ $keuntungan = $query_untung->fetch_assoc();
             <div class="performance-metrics">
                 <div class="metric-card today primary">
                     <h3>Pendapatan Hari Ini</h3>
-                    <span class="metric-value">Rp <?= number_format($keuntungan['keuntungan_value'] * $driver['total_volume'], 0, ',', '.') ?></span>
+                    <span class="metric-value">Rp <?= number_format($keuntungan_driver['keuntungan_value'] * $driver['total_volume'], 0, ',', '.') ?></span>
                     <p class="metric-detail">Dari <?= $driver['total_volume'] ?> mL Ampas Kopi</p>
                 </div>
 
                 <div class="metric-card monthly warning">
                     <h3>Total Volume Bulan Ini</h3>
                     <span class="metric-value"><?= $driver['total_volume'] ?> mL</span>
-                    <p class="metric-detail">Sama dengan Rp <?= number_format($keuntungan['keuntungan_value'] * $driver['total_volume'], 0, ',', '.') ?></p>
+                    <p class="metric-detail">Sama dengan Rp <?= number_format($keuntungan_driver['keuntungan_value'] * $driver['total_volume'], 0, ',', '.') ?></p>
                 </div>
             </div>
         </div>

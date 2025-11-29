@@ -578,12 +578,12 @@ section.sampah-notif iframe {
 }
 
 .notification li.danger:hover {
-    background-color: #ff7e7e;
+    background-color: #f95f5f;
     color: white;
 }
 
 .notification li.warning {
-    background-color: #fffbeb;
+    background-color: #ffeec4;
     color: #92400e;
 }
 

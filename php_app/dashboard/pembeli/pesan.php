@@ -1,28 +1,23 @@
 <?php
+include "config/db.php";
 
-if (isset($_GET['id'])) {
-    $id_toko = $_GET['id'];
+if (isset($_POST['pesan'])) {
+    require_once "../../functions/pesanan.php";
+    $id_produk = $_POST['id_produk'];
+    $jumlah = $_POST['jumlah'];
 } else {
-    // jika tidak ada id di URL, redirect ke halaman utama
-    header("Location: ./");
+    // jika tidak ada data yang dikirim, redirect kembali ke halaman sebelumnya
+    header("Location: ../");
     exit();
 }
 
-include "config/db.php";
-
-// user sementara (prototype)
-$id_user = 2;
+$id_user = $_SESSION['data']['id_user'];
 
 // pesanan ampas kopi
-$query = $conn->prepare("INSERT INTO pesanan (id_user, id_toko, status) VALUES (?, ?, 'Pending')");
-$query->bind_param("ii", $id_user, $id_toko);
-$query->execute();
-
-if ($query->affected_rows > 0) {
-    // jika berhasil, redirect ke halaman konfirmasi atau halaman lain yang sesuai
-    header("Location: /konfirmasi/");
-    exit();
+if (insertPesanan($id_user, $id_produk, $jumlah)) {
+    $_SESSION['message'] = 'Pesanan berhasil dibuat.';
+    header('Location: ./');
 } else {
-    // jika gagal, tampilkan pesan error atau lakukan penanganan lain
-    echo "Gagal membuat pesanan.";
+    $_SESSION['error'] = 'Error creating order.';
+    header('Location: ./');
 }

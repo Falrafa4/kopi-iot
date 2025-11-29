@@ -17,6 +17,15 @@ function getKeuntunganById($id)
     return $stmt->get_result()->fetch_assoc();
 }
 
+function getKeuntunganByName($name)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT * FROM keuntungan WHERE keuntungan_key = ?");
+    $stmt->bind_param("s", $name);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_assoc();
+}
+
 function insertKeuntungan($keuntungan_key, $keuntungan_value, $satuan, $keterangan = null)
 {
     global $conn;
