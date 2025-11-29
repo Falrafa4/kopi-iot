@@ -10,7 +10,7 @@ window.addEventListener("scroll", function () {
         // scroll ke bawah 🐧
         clearTimeout(hideTimeout);
         hideTimeout = setTimeout(() => {
-            navbar.style.top = "-10%";
+            navbar.style.top = "-15%";
         }, 0);
     } else {
         // scroll ke atas 🐧

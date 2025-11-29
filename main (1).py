@@ -52,15 +52,79 @@ FLASK_URL = "http://10.200.192.148:5000/sensor/upload"
 # ========================================
 # LOGIKA STATUS KELEMBAPAN
 # ========================================
-def cek_status_kelembapan(h):
-    if 80 <= h <= 100:
-        return "not ready", "merah"
-    elif 51 <= h <= 79:
-        return "almost ready", "kuning"
-    elif 40 <= h <= 50:
-        return "ready", "hijau"
+# def cek_status_kelembapan(h):
+#     if 80 <= h <= 100:
+#         return "not ready", "merah"
+#     elif 51 <= h <= 79:
+#         return "almost ready", "kuning"
+#     elif 40 <= h <= 50:
+#         return "ready", "hijau"
+#     else:
+#         return "Diluar Batas", "none"
+
+def cek_status_sensor(t, h):
+    """
+    Menentukan kesimpulan berdasarkan Suhu (t) dan Kelembapan (h)
+    Sesuai dengan logika PHP.
+    
+    Return: (Pesan Kesimpulan, Kode Warna)
+    """
+    
+    # --- 1. LOGIKA KATEGORI SUHU (Sesuai PHP function kategoriSuhu) ---
+    # PHP: <= 20 (ideal), <= 30 (ideal), else (panas)
+    if t <= 30:
+        status_suhu = "ideal"
     else:
-        return "Diluar Batas", "none"
+        status_suhu = "panas"
+
+    # --- 2. LOGIKA KATEGORI KELEMBAPAN (Sesuai PHP function kategoriKelembapan) ---
+    # PHP: 40-50 (ideal), <=79 (hampir jadi), >=80 (basah)
+    if 40 <= h <= 50:
+        status_lembab = "ideal"
+    elif h <= 79:
+        # Menangkap nilai <40 ATAU 51-79 (karena range 40-50 sudah diambil if pertama)
+        status_lembab = "hampir jadi"
+    else:
+        # Menangkap nilai >= 80
+        status_lembab = "basah"
+
+    # --- 3. KESIMPULAN AKHIR (Kombinasi Suhu & Kelembapan) ---
+    
+    # KONDISI 1: TERBAIK (GOLDEN STANDARD)
+    if status_suhu == "ideal" and status_lembab == "ideal":
+        msg = "ready"
+        color = "hijau"
+
+    # KONDISI 2: BAIK (STANDARD)
+    elif status_suhu == "ideal" and status_lembab == "hampir jadi":
+        msg = "ready"
+        color = "hijau"
+
+    # KONDISI 3: DINGIN TAPI BASAH
+    elif status_suhu == "ideal" and status_lembab == "basah":
+        msg = "not ready"
+        color = "merah"
+
+    # KONDISI 4: PANAS TAPI KERING
+    elif status_suhu == "panas" and status_lembab == "ideal":
+        msg = "almost ready"
+        color = "kuning"
+
+    # KONDISI 5: PANAS DAN KURANG PAS
+    elif status_suhu == "panas" and status_lembab == "hampir jadi":
+        msg = "almost ready"
+        color = "kuning"
+
+    # KONDISI 6: KRITIS (PANAS & BASAH)
+    elif status_suhu == "panas" and status_lembab == "basah":
+        msg = "not ready"
+        color = "merah"
+        
+    else:
+        msg = "Data Sensor Tidak Valid atau Menunggu Pembacaan..."
+        color = "none"
+
+    return msg, color
 
 
 def update_led(warna):
@@ -92,10 +156,10 @@ while True:
         humidity = sensor.humidity()
 
         # Tentukan status berdasarkan kelembapan
-        status, warna_led = cek_status_kelembapan(humidity)
+        status, warna_led = cek_status_sensor(temperature, humidity)
         update_led(warna_led)
 
-        print("Kelembapan:", humidity, "% | Status:", status)
+        print("Suhu:", temperature, "Kelembapan:", humidity, "% | Status:", status)
 
         # --------------------
         # BACA HC-SR04

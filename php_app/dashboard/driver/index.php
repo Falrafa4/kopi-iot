@@ -41,6 +41,28 @@ $query_driver->bind_param("i", $id_user);
 $query_driver->execute();
 $result_driver = $query_driver->get_result();
 $driver = $result_driver->fetch_assoc();
+
+// sudah diambil
+if (isset($_GET['id']) && !empty($_GET['id'])) {
+    $id_toko_diambil = $_GET['id'];
+
+    // update status sensor jadi not ready
+    $update_sensor = $conn->prepare("UPDATE sensor SET status = 'not ready', prediksi_selesai = NULL WHERE id_toko = ?");
+    $update_sensor->bind_param("i", $id_toko_diambil);
+    $update_sensor->execute();
+
+    // update total volume driver
+    $volume_ambil = 500; // mL per pengambilan (asumsi)
+    $new_total_volume = $driver['total_volume'] + $volume_ambil;
+
+    $update_driver = $conn->prepare("UPDATE driver SET total_volume = ? WHERE id_user = ?");
+    $update_driver->bind_param("ii", $new_total_volume, $id_user);
+    $update_driver->execute();
+
+    // refresh halaman untuk menghindari resubmission
+    header("Location: ./");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -288,17 +310,22 @@ $driver = $result_driver->fetch_assoc();
                             // Default: hanya lokasi toko
                             let mapSrc = `https://www.google.com/maps?q=${data.lat},${data.lng}&z=15&output=embed`;
 
+                            console.log("Data toko:", data);
+
                             // Masukkan iframe terlebih dahulu
                             mapPlaceholder.innerHTML = `
-                        <iframe
-                            id="mapFrame"
-                            width="600"
-                            height="450"
-                            style="border:0;"
-                            loading="lazy"
-                            allowfullscreen
-                            src="${mapSrc}">
-                        </iframe>
+                            <iframe
+                                id="mapFrame"
+                                width="600"
+                                height="450"
+                                style="border:0;"
+                                loading="lazy"
+                                allowfullscreen
+                                src="${mapSrc}">
+                            </iframe>
+                            <!-- <a href="index.php?id=${data.id_toko}" class="see-more" style="display: block; margin-top: 10px;">
+                                Sudah Diambil
+                            </a> -->
                     `;
 
                             // Setelah iframe dibuat → ambil lokasi user

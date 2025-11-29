@@ -84,9 +84,9 @@ if (isset($_GET['delete'])) {
                             <th>Suhu</th>
                             <th>Kelembapan</th>
                             <th>Volume</th>
-                            <th>Selesai</th>
                             <th>Prediksi Selesai</th>
                             <th>Waktu Update</th>
+                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -101,9 +101,10 @@ if (isset($_GET['delete'])) {
                                 <td><?= is_null($sensor['suhu']) ? 'N/A' : htmlspecialchars($sensor['suhu']) ?> °C</td>
                                 <td><?= is_null($sensor['kelembapan']) ? 'N/A' : htmlspecialchars($sensor['kelembapan']) ?> %</td>
                                 <td><?= is_null($sensor['volume']) ? 'N/A' : htmlspecialchars($sensor['volume']) ?> %</td>
-                                <td><?= $sensor['selesai'] == 0 ? 'Belum Selesai' : 'Selesai' ?></td>
+                                <!-- <td><?php //echo $sensor['selesai'] == 0 ? 'Belum Selesai' : 'Selesai' ?></td> -->
                                 <td><?= is_null($sensor['prediksi_selesai']) ? 'N/A' : htmlspecialchars($sensor['prediksi_selesai']) ?></td>
                                 <td><?= htmlspecialchars($sensor['waktu_update']) ?></td>
+                                <td><?= ucwords(htmlspecialchars($sensor['status'])) ?></td>
                                 <td>
                                     <a href="kelola.php?id=<?= urlencode($sensor['id_sensor']) ?>" class="edit">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#684503">

@@ -41,7 +41,7 @@ section.hero p {
 }
 
 section.feature {
-    padding: 8rem 8rem;
+    padding: 10rem 8rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -76,7 +76,7 @@ section.about hr {
 }
 
 section.about {
-    padding: 8rem 8rem;
+    padding: 12rem 8rem;
     display: flex;
     flex-direction: column;
     align-items: center;

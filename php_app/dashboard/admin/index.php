@@ -226,7 +226,7 @@ $total_users = $result_users->fetch_assoc()['total_users'];
                 </div>
             </section>
 
-            <section class="admin-charts-maps">
+            <!-- <section class="admin-charts-maps">
                 <h2 class="mb-3">Logistik & Pemantauan</h2>
                 <div class="charts-maps-grid">
 
@@ -258,7 +258,7 @@ $total_users = $result_users->fetch_assoc()['total_users'];
                     </div>
 
                 </div>
-            </section>
+            </section> -->
         </main>
     </div>
     <!-- KONTEN END -->

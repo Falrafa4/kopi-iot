@@ -43,6 +43,8 @@ session_start();
     <!-- FOOTER -->
     <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/footer.php'; ?>
     <!-- FOOTER END -->
+
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

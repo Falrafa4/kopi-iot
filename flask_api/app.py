@@ -39,8 +39,6 @@ def save_to_db(data):
         data['kelembapan'],
         data['volume'],
         data['selesai'],
-        data['gps_lat'],
-        data['gps_lon'],
         data['prediksi']
     ))
 
